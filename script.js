@@ -102,36 +102,46 @@ document.addEventListener("DOMContentLoaded", () => {
 	}
 
 	// Debounce Function to Prevent Multiple Triggers
-	let isProcessingClick = false; // Flag to track ongoing interactions
+	let isProcessingInteraction = false; // Flag to track ongoing interactions
 
 	function handleInteraction(event) {
-		if (isProcessingClick) return; // Ignore if already processing
-		isProcessingClick = true; // Set flag to true
+		if (isProcessingInteraction) return; // Ignore if already processing
+		isProcessingInteraction = true; // Set flag to true
 
 		// Process the interaction
 		if (!startScreen.classList.contains("hidden")) return;
 		if (!finalSurprise.classList.contains("hidden")) return;
 
-		// Prevent default behavior only if it's not passive
-		if (event.cancelable) {
-			event.preventDefault();
-		}
-
 		showNextText();
 
 		// Reset the flag after a short delay
 		setTimeout(() => {
-			isProcessingClick = false;
+			isProcessingInteraction = false;
 		}, 500); // 500ms delay to prevent rapid skipping
 	}
 
-	// Click or Touch Anywhere to Progress
-	document.addEventListener("click", handleInteraction);
+	// Handle Mouse Events
+	document.addEventListener("mousedown", () => {
+		console.log("Mouse down detected");
+	});
 
-	// Explicitly set passive: false for touchstart
+	document.addEventListener("mouseup", handleInteraction);
+
+	// Handle Touch Events
 	document.addEventListener(
 		"touchstart",
-		handleInteraction,
+		() => {
+			console.log("Touch start detected");
+		},
+		{ passive: false } // Disable passive mode
+	);
+
+	document.addEventListener(
+		"touchend",
+		(event) => {
+			event.preventDefault(); // Prevent default touch behavior
+			handleInteraction(event);
+		},
 		{ passive: false } // Disable passive mode
 	);
 });
