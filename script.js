@@ -101,17 +101,37 @@ document.addEventListener("DOMContentLoaded", () => {
 		}
 	}
 
-	// Click or Touch Anywhere to Progress
-	document.addEventListener("click", () => {
-		if (!startScreen.classList.contains("hidden")) return;
-		if (!finalSurprise.classList.contains("hidden")) return;
-		showNextText();
-	});
+	// Debounce Function to Prevent Multiple Triggers
+	let isProcessingClick = false; // Flag to track ongoing interactions
 
-	// Fallback for Touch Events
-	document.addEventListener("touchstart", () => {
+	function handleInteraction(event) {
+		if (isProcessingClick) return; // Ignore if already processing
+		isProcessingClick = true; // Set flag to true
+
+		// Process the interaction
 		if (!startScreen.classList.contains("hidden")) return;
 		if (!finalSurprise.classList.contains("hidden")) return;
+
+		// Prevent default behavior only if it's not passive
+		if (event.cancelable) {
+			event.preventDefault();
+		}
+
 		showNextText();
-	});
+
+		// Reset the flag after a short delay
+		setTimeout(() => {
+			isProcessingClick = false;
+		}, 500); // 500ms delay to prevent rapid skipping
+	}
+
+	// Click or Touch Anywhere to Progress
+	document.addEventListener("click", handleInteraction);
+
+	// Explicitly set passive: false for touchstart
+	document.addEventListener(
+		"touchstart",
+		handleInteraction,
+		{ passive: false } // Disable passive mode
+	);
 });
