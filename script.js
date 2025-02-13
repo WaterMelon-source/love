@@ -102,36 +102,51 @@ document.addEventListener("DOMContentLoaded", () => {
 	}
 
 	// Debounce Function to Prevent Multiple Triggers
-	let isProcessingInteraction = false; // Flag to track ongoing interactions
+	let isProcessingClick = false; // Flag to track ongoing interactions
+	let interactionTimeout = null; // Timeout to track the 2.5-second delay
 
-	function handleInteraction(event) {
-		if (isProcessingInteraction) return; // Ignore if already processing
-		isProcessingInteraction = true; // Set flag to true
+	function handleInteractionStart(event) {
+		if (isProcessingClick) return; // Ignore if already processing
 
-		// Process the interaction
-		if (!startScreen.classList.contains("hidden")) return;
-		if (!finalSurprise.classList.contains("hidden")) return;
+		// Set a timeout for 2.5 seconds
+		interactionTimeout = setTimeout(() => {
+			isProcessingClick = true; // Allow interaction after 2.5 seconds
 
-		showNextText();
+			// Process the interaction
+			if (!startScreen.classList.contains("hidden")) return;
+			if (!finalSurprise.classList.contains("hidden")) return;
 
-		// Reset the flag after a short delay
-		setTimeout(() => {
-			isProcessingInteraction = false;
-		}, 500); // 500ms delay to prevent rapid skipping
+			// Prevent default behavior only if it's not passive
+			if (event.cancelable) {
+				event.preventDefault();
+			}
+
+			showNextText();
+
+			// Reset the flag after a short delay
+			setTimeout(() => {
+				isProcessingClick = false;
+			}, 500); // 500ms cooldown to prevent rapid skipping
+		}, 500); // 2.5-second delay
+	}
+
+	function handleInteractionEnd() {
+		// Clear the timeout if the interaction ends before 2.5 seconds
+		if (interactionTimeout) {
+			clearTimeout(interactionTimeout);
+			interactionTimeout = null;
+		}
 	}
 
 	// Handle Mouse Events
-	document.addEventListener("mousedown", () => {
-		console.log("Mouse down detected");
-	});
-
-	document.addEventListener("mouseup", handleInteraction);
+	document.addEventListener("mousedown", handleInteractionStart);
+	document.addEventListener("mouseup", handleInteractionEnd);
 
 	// Handle Touch Events
 	document.addEventListener(
 		"touchstart",
-		() => {
-			console.log("Touch start detected");
+		(event) => {
+			handleInteractionStart(event);
 		},
 		{ passive: false } // Disable passive mode
 	);
@@ -139,8 +154,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	document.addEventListener(
 		"touchend",
 		(event) => {
-			event.preventDefault(); // Prevent default touch behavior
-			handleInteraction(event);
+			handleInteractionEnd(event);
 		},
 		{ passive: false } // Disable passive mode
 	);
