@@ -1,0 +1,186 @@
+/* General Reset */
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+body {
+	font-family: "Arial", sans-serif;
+	height: 100vh;
+	overflow: hidden;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	/* Gradient Background Animation */
+	background: linear-gradient(135deg, #ff9a9e, #fad0c4, #fbc2eb, #a6c1ee);
+	background-size: 400% 400%; /* Larger size for smooth transitions */
+	animation: gradientAnimation 10s ease infinite; /* Smooth gradient animation */
+}
+
+/* Gradient Animation */
+@keyframes gradientAnimation {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
+}
+
+.centered {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	text-align: center;
+}
+
+.hidden {
+	display: none;
+}
+
+/* White Background Container */
+.white-bg {
+	background: rgba(255, 255, 255, 0.8); /* Semi-transparent white background */
+	padding: 20px 30px;
+	border-radius: 15px; /* Rounded corners */
+	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+	z-index: 10; /* Ensure it's above other elements */
+}
+
+/* Start Screen */
+#start-screen {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	text-align: center;
+	z-index: 10; /* Bring the start screen to the front */
+	animation: fadeIn 2s ease-in-out;
+}
+
+.love-message {
+	font-size: 1rem;
+	font-weight: bold;
+	color: #ff6f61; /* Vibrant pink color */
+}
+
+#continue-btn {
+	margin-top: 20px;
+	padding: 10px 20px;
+	font-size: 1rem;
+	color: #fff;
+	background-color: #ff6f61;
+	border: none;
+	border-radius: 25px;
+	cursor: pointer;
+	transition: background-color 0.3s ease, transform 0.3s ease;
+	z-index: 11; /* Ensure the button is above everything else */
+}
+
+#continue-btn:hover {
+	background-color: #ff4d4d;
+	transform: scale(1.1); /* Slightly enlarge the button on hover */
+}
+
+/* Image Container */
+#image-container {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+}
+
+.image-item {
+	position: absolute;
+	animation: float 5s infinite ease-in-out;
+}
+
+/* Memory Text */
+#memory-text p {
+	font-size: 1.5rem;
+	font-weight: bold;
+	animation: fadeIn 1s ease-in-out;
+	color: #ff6f61; /* Dark text color for contrast */
+}
+
+/* Final Surprise */
+#final-surprise {
+	text-align: center;
+	animation: fadeIn 2s ease-in-out;
+}
+
+#final-surprise h2 {
+	font-size: 2rem;
+	margin-bottom: 10px;
+	color: #ff6f61; /* Vibrant pink color */
+	text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+}
+
+#final-surprise p {
+	font-size: 1.2rem;
+	color: #333; /* Dark text color for contrast */
+}
+
+/* Animations */
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
+@keyframes float {
+	0%,
+	100% {
+		transform: translateY(0);
+	}
+	50% {
+		transform: translateY(-10px);
+	}
+}
+
+/* Pulsing Effect for Start Message */
+@keyframes pulse {
+	from {
+		transform: scale(1);
+	}
+	to {
+		transform: scale(1.05);
+	}
+}
+
+/* Smooth Fade Animation */
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
+@keyframes fadeOut {
+	from {
+		opacity: 1;
+	}
+	to {
+		opacity: 0;
+	}
+}
+
+.image-item {
+	position: absolute;
+	animation: fadeIn 1s ease-in-out;
+	pointer-events: none; /* Prevent interaction with images */
+}
+
+.image-item.fade-out {
+	animation: fadeOut 1s ease-in-out;
+}
